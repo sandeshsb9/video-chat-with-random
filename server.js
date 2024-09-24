@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const getPort = require('get-port');
 
 const app = express();
 const server = http.createServer(app);
@@ -85,8 +86,9 @@ io.on('connection', socket => {
   });
 });
 
-// Listen on a random port between 1024 and 65535
-const randomPort = Math.floor(Math.random() * (65535 - 1024 + 1)) + 1024;
-server.listen(randomPort, () => {
-  console.log(`Listening on *:${randomPort}`);
+// Get a random available port and listen on it
+getPort().then(port => {
+  server.listen(port, () => {
+    console.log(`Listening on *:${port}`);
+  });
 });
