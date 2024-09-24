@@ -15,7 +15,7 @@ io.on('connection', socket => {
   onlineUserCount++;
   io.emit('update-online-users', onlineUserCount);
 
-  console.log(User connected: ${socket.id}. Online users: ${onlineUserCount});
+  console.log(`User connected: ${socket.id}. Online users: ${onlineUserCount}`);
 
   socket.on('disconnect', () => {
     onlineUserCount--;
@@ -85,6 +85,9 @@ io.on('connection', socket => {
   });
 });
 
-server.listen(3000, () => {
-  console.log('Listening on *:3000');
+// Use the environment variable PORT or default to 3000 if not available
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, () => {
+  console.log(`Listening on *:${PORT}`);
 });
