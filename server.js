@@ -1,7 +1,6 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const getPort = require('get-port');
 
 const app = express();
 const server = http.createServer(app);
@@ -16,7 +15,7 @@ io.on('connection', socket => {
   onlineUserCount++;
   io.emit('update-online-users', onlineUserCount);
 
-  console.log(`User connected: ${socket.id}. Online users: ${onlineUserCount}`);
+  console.log(User connected: ${socket.id}. Online users: ${onlineUserCount});
 
   socket.on('disconnect', () => {
     onlineUserCount--;
@@ -86,9 +85,6 @@ io.on('connection', socket => {
   });
 });
 
-// Get a random available port and listen on it
-getPort().then(port => {
-  server.listen(port, () => {
-    console.log(`Listening on *:${port}`);
-  });
+server.listen(3000, () => {
+  console.log('Listening on *:3000');
 });
