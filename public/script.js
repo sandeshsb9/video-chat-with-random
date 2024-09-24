@@ -62,21 +62,11 @@ reportBtn.onclick = () => {
 
 // WebRTC setup for video
 startVideoBtn.onclick = async () => {
+  if (!peerConnection) createPeerConnection();  // Ensure peerConnection is initialized
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   localVideo.srcObject = localStream;
 
-  peerConnection = new RTCPeerConnection();
   localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-  peerConnection.ontrack = event => {
-    remoteVideo.srcObject = event.streams[0];
-  };
-
-  peerConnection.onicecandidate = event => {
-    if (event.candidate) {
-      socket.emit('ice-candidate', event.candidate);
-    }
-  };
 
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
@@ -95,15 +85,16 @@ function stopMedia() {
   }
   localVideo.srcObject = null;
   remoteVideo.srcObject = null;
+
+  if (peerConnection) {
+    peerConnection.close();
+    peerConnection = null;  // Reset the connection for the next chat
+  }
 }
 
 // WebRTC signaling
 socket.on('offer', async offer => {
-  peerConnection = new RTCPeerConnection();
-  peerConnection.ontrack = event => {
-    remoteVideo.srcObject = event.streams[0];
-  };
-
+  if (!peerConnection) createPeerConnection();
   await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
   const answer = await peerConnection.createAnswer();
   await peerConnection.setLocalDescription(answer);
@@ -121,10 +112,25 @@ socket.on('ice-candidate', candidate => {
 // Handle sudden disconnection and display message in the chat
 socket.on('disconnected', () => {
   appendMessage("System", "The stranger has disconnected.");
-  remoteVideo.srcObject = null; // Remove the video stream
+  stopMedia(); // Clean up the video and WebRTC connection
 });
 
 // Update online users count
 socket.on('update-online-users', count => {
   onlineCountSpan.textContent = count;
 });
+
+// Function to create a new peer connection
+function createPeerConnection() {
+  peerConnection = new RTCPeerConnection();
+
+  peerConnection.ontrack = event => {
+    remoteVideo.srcObject = event.streams[0];
+  };
+
+  peerConnection.onicecandidate = event => {
+    if (event.candidate) {
+      socket.emit('ice-candidate', event.candidate);
+    }
+  };
+}
