@@ -85,6 +85,8 @@ io.on('connection', socket => {
   });
 });
 
-server.listen(3000, () => {
-  console.log('Listening on *:3000');
+// Listen on a random port between 1024 and 65535
+const randomPort = Math.floor(Math.random() * (65535 - 1024 + 1)) + 1024;
+server.listen(randomPort, () => {
+  console.log(`Listening on *:${randomPort}`);
 });
