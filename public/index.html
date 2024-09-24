@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anonymous Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Search Users Section -->
+  <div id="interest-container">
+    <h1>Find a Stranger with Similar Interests</h1>
+    <input type="text" id="interest" placeholder="Enter your interest (e.g., movies, sports)">
+    <button id="searchUser">Start Chat</button>
+  </div>
+
+  <!-- Chat Section (Initially Hidden) -->
+  <div id="chat-container" style="display: none;">
+    <div id="header">
+      <div id="online-users">Online Users: <span id="onlineCount">0</span></div>
+    </div>
+
+    <div id="video-container">
+      <video id="localVideo" autoplay muted></video>
+      <video id="remoteVideo" autoplay></video>
+    </div>
+
+    <div id="messages"></div>
+
+    <div id="messageInput">
+      <input type="text" id="message" placeholder="Type a message..." autofocus>
+      <button id="send">Send</button>
+      <button id="next">Next</button>
+      <button id="report">Report</button>
+    </div>
+
+    <div id="controls">
+      <button id="startVideo">Start Video</button>
+      <button id="stopVideo" class="stop">Stop Video</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
