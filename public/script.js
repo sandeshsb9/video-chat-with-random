@@ -11,6 +11,7 @@ const stopVideoBtn = document.getElementById("stopVideo");
 const interestInput = document.getElementById("interest");
 const searchUserBtn = document.getElementById("searchUser");
 const onlineCountSpan = document.getElementById("onlineCount");
+const notification = document.getElementById("notification"); // Notification div
 
 let localStream, peerConnection, interest;
 
@@ -27,24 +28,44 @@ searchUserBtn.onclick = () => {
 };
 
 // Send message on click
-sendBtn.onclick = () => {
+sendBtn.onclick = sendMessage;
+
+// Send message on Enter key press
+messageInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    sendMessage();
+    event.preventDefault(); // Prevent form submission (if inside a form)
+  }
+});
+
+function sendMessage() {
   const message = messageInput.value;
   if (message) {
     socket.emit('message', message);
     appendMessage("You", message);
     messageInput.value = "";
   }
-};
+}
 
 // Display received message
 socket.on('message', message => {
   appendMessage("Stranger", message);
+  showNotification("New message received from Stranger: " + message); // Show notification
 });
 
 function appendMessage(sender, message) {
   const div = document.createElement("div");
   div.textContent = `${sender}: ${message}`;
   messagesDiv.appendChild(div);
+}
+
+// Function to show notification
+function showNotification(message) {
+  notification.textContent = message;
+  notification.style.display = 'block'; // Show notification
+  setTimeout(() => {
+    notification.style.display = 'none'; // Hide after 5 seconds
+  }, 5000);
 }
 
 // Connect to next stranger

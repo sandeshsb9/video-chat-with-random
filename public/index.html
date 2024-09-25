@@ -12,8 +12,11 @@
   <div id="interest-container">
     <h1>Find a Stranger with Similar Interests</h1>
     <input type="text" id="interest" placeholder="Enter your interest (e.g., movies, sports)">
-    <button id="searchUser">Start Chat</button>
+    <button id="searchUser" type="button">Start Chat</button>
   </div>
+  
+  <!-- Notification Section -->
+  <div id="notification" style="display:none; position:fixed; top:10px; right:10px; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;"></div>
 
   <!-- Chat Section (Initially Hidden) -->
   <div id="chat-container" style="display: none;">
@@ -30,14 +33,14 @@
 
     <div id="messageInput">
       <input type="text" id="message" placeholder="Type a message..." autofocus>
-      <button id="send">Send</button>
-      <button id="next">Next</button>
-      <button id="report">Report</button>
+      <button id="send" type="button">Send</button>
+      <button id="next" type="button">Next</button>
+      <button id="report" type="button">Report</button>
     </div>
 
     <div id="controls">
-      <button id="startVideo">Start Video</button>
-      <button id="stopVideo" class="stop">Stop Video</button>
+      <button id="startVideo" type="button">Start Video</button>
+      <button id="stopVideo" class="stop" type="button">Stop Video</button>
     </div>
   </div>
 
